@@ -64,7 +64,12 @@
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipNames')[copyIndex()])]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer'), '/backendAddressPools/myBackEndPool')]"
+                }
+            ]
             }
           }
         ]
