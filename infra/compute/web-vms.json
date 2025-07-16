@@ -26,6 +26,20 @@
   },
   "resources": [
     {
+        "type": "Microsoft.Compute/availabilitySets",
+        "apiVersion": "2022-03-01",
+        "name": "myAvailSet",
+        "location": "[parameters('locationEastUS')]",
+        "properties": {
+            "platformFaultDomainCount": 2,
+            "platformUpdateDomainCount": 5
+        },
+        "sku": {
+            "name": "Aligned"
+        }
+    },
+
+    {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
       "name": "[variables('pipNames')[copyIndex()]]",
@@ -88,6 +102,9 @@
         "nicCopy"
       ],
       "properties": {
+        "availabilitySet": {
+            "id": "[resourceId('Microsoft.Compute/availabilitySets', 'myAvailSet')]"
+        },
         "hardwareProfile": {
           "vmSize": "Standard_B2ms"
         },
