@@ -1,0 +1,118 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "locationEastUS": {
+      "type": "string"
+    },
+    "vnetNameEastUS": {
+      "type": "string"
+    },
+    "subnetNameEastUS": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "vmNames": [ "w1", "w2" ],
+    "nicNames": [ "w1-nic", "w2-nic" ],
+    "pipNames": [ "w1-pip", "w2-pip" ],
+    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS'), parameters('subnetNameEastUS'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('pipNames')[copyIndex()]]",
+      "location": "[parameters('locationEastUS')]",
+      "copy": {
+        "name": "pipCopy",
+        "count": 2
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "sku": {
+        "name": "Basic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('nicNames')[copyIndex()]]",
+      "location": "[parameters('locationEastUS')]",
+      "copy": {
+        "name": "nicCopy",
+        "count": 2
+      },
+      "dependsOn": [
+        "pipCopy"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetId')]"
+              },
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipNames')[copyIndex()])]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('vmNames')[copyIndex()]]",
+      "location": "[parameters('locationEastUS')]",
+      "copy": {
+        "name": "vmCopy",
+        "count": 2
+      },
+      "dependsOn": [
+        "nicCopy"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2ms"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmNames')[copyIndex()]]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicNames')[copyIndex()])]"
+            }
+          ]
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2016-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

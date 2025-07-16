@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetNameEastUS": { "type": "string" },
+    "vnetNameEastUS2": { "type": "string" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('vnetNameEastUS'), '/toEastUS2')]",
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetNameEastUS2'))]"
+        },
+        "allowVirtualNetworkAccess": true
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('vnetNameEastUS2'), '/toEastUS')]",
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetNameEastUS'))]"
+        },
+        "allowVirtualNetworkAccess": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "locationEastUS": { "type": "string" },
+    "locationEastUS2": { "type": "string" },
+    "vnetNameEastUS": { "type": "string" },
+    "vnetNameEastUS2": { "type": "string" },
+    "subnetNameEastUS": { "type": "string" },
+    "subnetNameEastUS2": { "type": "string" },
+    "adminUsername": { "type": "string" },
+    "adminPassword": { "type": "securestring" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "deployVNets",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "<URL_TO>/network/vnets.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
+          "locationEastUS2": { "value": "[parameters('locationEastUS2')]" },
+          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
+          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" },
+          "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
+          "subnetNameEastUS2": { "value": "[parameters('subnetNameEastUS2')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployPeering",
+      "dependsOn": ["deployVNets"],
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "<URL_TO>/network/vnet-peering.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
+          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployCompute",
+      "dependsOn": ["deployPeering"],
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "<URL_TO>/compute/web-vms.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
+          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
+          "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployBackend",
+      "dependsOn": ["deployCompute"],
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "<URL_TO>/compute/ws11-vm.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "locationEastUS2": { "value": "[parameters('locationEastUS2')]" },
+          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" },
+          "subnetNameEastUS2": { "value": "[parameters('subnetNameEastUS2')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "deployLoadBalancer",
+      "dependsOn": ["deployCompute"],
+      "apiVersion": "2021-04-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "<URL_TO>/network/loadbalancer.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
+          "backendPoolVMs": {
+            "value": [
+              "[resourceId('Microsoft.Network/networkInterfaces', 'w1-nic')]",
+              "[resourceId('Microsoft.Network/networkInterfaces', 'w2-nic')]"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
