@@ -35,10 +35,10 @@
         "count": 2
       },
       "properties": {
-        "publicIPAllocationMethod": "Dynamic"
+        "publicIPAllocationMethod": "Static"
       },
       "sku": {
-        "name": "Basic"
+        "name": "Standard"
       }
     },
     {
