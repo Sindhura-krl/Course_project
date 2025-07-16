@@ -22,6 +22,7 @@
         {
             "type": "Microsoft.Network/azureFirewalls",
             "name": "myAzureFirewall",
+            "apiVersion": "2021-08-01", 
             "location": "[parameters('locationEastUS2')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetNameEastUS2'))]",
