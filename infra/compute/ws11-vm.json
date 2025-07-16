@@ -83,17 +83,6 @@
             }
         },
         {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('vnetNameEastUS2'), '/', parameters('subnetNameEastUS2'))]",
-            "properties": {
-                "addressPrefix": "10.1.0.0/24",
-                "routeTable": {
-                    "id": "[resourceId('Microsoft.Network/routeTables', 'myRouteTable')]"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Network/firewallPolicies",
             "apiVersion": "2021-08-01",
             "name": "myFirewallPolicy",
