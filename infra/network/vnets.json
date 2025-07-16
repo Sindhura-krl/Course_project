@@ -1,58 +1,74 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "locationEastUS": { "type": "string" },
-    "locationEastUS2": { "type": "string" },
-    "vnetNameEastUS": { "type": "string" },
-    "vnetNameEastUS2": { "type": "string" },
-    "subnetNameEastUS": { "type": "string" },
-    "subnetNameEastUS2": { "type": "string" }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('vnetNameEastUS')]",
-      "location": "[parameters('locationEastUS')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": ["10.0.0.0/16"]
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "locationEastUS": {
+            "type": "string"
         },
-        "subnets": [
-          {
-            "name": "[parameters('subnetNameEastUS')]",
-            "properties": {
-              "addressPrefix": "10.0.0.0/24"
-            }
-          }
-        ]
-      }
+        "locationEastUS2": {
+            "type": "string"
+        },
+        "vnetNameEastUS": {
+            "type": "string"
+        },
+        "vnetNameEastUS2": {
+            "type": "string"
+        },
+        "subnetNameEastUS": {
+            "type": "string"
+        },
+        "subnetNameEastUS2": {
+            "type": "string"
+        }
     },
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('vnetNameEastUS2')]",
-      "location": "[parameters('locationEastUS2')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": ["10.1.0.0/16"]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetNameEastUS2')]",
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('vnetNameEastUS')]",
+            "location": "[parameters('locationEastUS')]",
             "properties": {
-              "addressPrefix": "10.1.0.0/24"
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetNameEastUS')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    }
+                ]
             }
-          },
-          {
-            "name": "AzureFirewallSubnet",
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('vnetNameEastUS2')]",
+            "location": "[parameters('locationEastUS2')]",
             "properties": {
-                "addressPrefix": "10.1.1.0/26"
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetNameEastUS2')]",
+                        "properties": {
+                            "addressPrefix": "10.1.0.0/24"
+                        }
+                    },
+                    {
+                        "name": "AzureFirewallSubnet",
+                        "properties": {
+                            "addressPrefix": "10.1.1.0/26"
+                        }
+                    }
+                ]
             }
         }
-        ]
-      }
-    }
-  ]
+    ]
 }
