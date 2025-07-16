@@ -19,7 +19,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://github.com/Sindhura-krl/Course_project.git/infra/network/vnets.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnets.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -40,7 +40,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://github.com/Sindhura-krl/Course_project.git/infra/network/vnet-peering.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnet-peering.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -57,7 +57,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://github.com/Sindhura-krl/Course_project.git/infra/compute/web-vms.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/web-vms.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -77,7 +77,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://github.com/Sindhura-krl/Course_project.git/infra/compute/ws11-vm.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/ws11-vm.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -97,7 +97,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://github.com/Sindhura-krl/Course_project.git/infra/network/loadbalancer.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/loadbalancer.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
