@@ -16,6 +16,9 @@
       "sku": {
         "name": "Standard"
       },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'myPublicIP')]"
+    ],
       "properties": {
         "frontendIPConfigurations": [
           {
