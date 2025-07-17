@@ -57,42 +57,6 @@
           }
         ]
       }
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-      "apiVersion": "2023-04-01",
-      "name": "[concat(variables('eastVNetName'), '/EastToEast2Peering')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('eastVNetName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
-      ],
-      "properties": {
-        "remoteVirtualNetwork": {
-          "id": "[resourceId('MyProjectRG', 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
-        },
-        "allowVirtualNetworkAccess": true,
-        "allowForwardedTraffic": true,
-        "allowGatewayTransit": false,
-        "useRemoteGateways": false
-      }
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-      "apiVersion": "2023-04-01",
-      "name": "[concat(variables('east2VNetName'), '/East2ToEastPeering')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('eastVNetName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
-      ],
-      "properties": {
-        "remoteVirtualNetwork": {
-          "id": "[resourceId('MyProjectRG', 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
-        },
-        "allowVirtualNetworkAccess": true,
-        "allowForwardedTraffic": true,
-        "allowGatewayTransit": false,
-        "useRemoteGateways": false
-      }
     }
   ]
 }
