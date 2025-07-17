@@ -68,7 +68,7 @@
       ],
       "properties": {
         "remoteVirtualNetwork": {
-          "id": "[resourceId(parameters('locationEastUS2'), 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
+          "id": "[resourceId('MyProjectRG', 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
         },
         "allowVirtualNetworkAccess": true,
         "allowForwardedTraffic": true,
@@ -86,7 +86,7 @@
       ],
       "properties": {
         "remoteVirtualNetwork": {
-          "id": "[resourceId(parameters('locationEastUS'), 'Microsoft.Network/virtualNetworks', variables('eastVNetName'))]"
+          "id": "[resourceId('MyProjectRG', 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
         },
         "allowVirtualNetworkAccess": true,
         "allowForwardedTraffic": true,
