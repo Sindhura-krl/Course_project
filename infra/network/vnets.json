@@ -2,8 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": { "type": "string" },
-    "locationEastUS2": { "type": "string" }
+    "locationEastUS": {
+      "type": "string"
+    },
+    "locationEastUS2": {
+      "type": "string"
+    }
   },
   "variables": {
     "eastVNetName": "EastUS-VNet",
@@ -19,7 +23,9 @@
       "location": "[parameters('locationEastUS')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [ "[variables('eastVNetAddress')]" ]
+          "addressPrefixes": [
+            "[variables('eastVNetAddress')]"
+          ]
         },
         "subnets": [
           {
@@ -38,7 +44,9 @@
       "location": "[parameters('locationEastUS2')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [ "[variables('east2VNetAddress')]" ]
+          "addressPrefixes": [
+            "[variables('east2VNetAddress')]"
+          ]
         },
         "subnets": [
           {
@@ -65,9 +73,7 @@
         "allowVirtualNetworkAccess": true,
         "allowForwardedTraffic": true,
         "allowGatewayTransit": false,
-        "useRemoteGateways": false,
-        "enableVirtualNetworkAccess": true,
-        "enableVmProtection": true
+        "useRemoteGateways": false
       }
     },
     {
@@ -85,9 +91,7 @@
         "allowVirtualNetworkAccess": true,
         "allowForwardedTraffic": true,
         "allowGatewayTransit": false,
-        "useRemoteGateways": false,
-        "enableVirtualNetworkAccess": true,
-        "enableVmProtection": true
+        "useRemoteGateways": false
       }
     }
   ]
