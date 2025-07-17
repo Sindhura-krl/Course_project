@@ -103,7 +103,7 @@
         "ruleCollections": [
           {
             "name": "BlockSocialMediaCollection",
-            "ruleCollectionType": "application",
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
             "priority": 110,
             "action": {
               "type": "Deny"
@@ -111,9 +111,9 @@
             "rules": [
               {
                 "name": "BlockSocialMedia",
-                "ruleType": "application",
+                "ruleType": "ApplicationRule",
                 "sourceAddresses": [
-                  "0.0.0.0/0"
+                  "*"
                 ],
                 "protocols": [
                   {
