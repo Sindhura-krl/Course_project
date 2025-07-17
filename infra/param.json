@@ -7,6 +7,39 @@
     },
     "locationEastUS2": {
       "value": "eastus2"
+    },
+    "vnetNameEastUS": {
+      "value": "EastUS-VNet"
+    },
+    "vnetNameEastUS2": {
+      "value": "EastUS2-VNet"
+    },
+    "availabilitySetName": {
+      "value": "WebAS"
+    },
+    "vmName1": {
+      "value": "w1"
+    },
+    "vmName2": {
+      "value": "w2"
+    },
+    "vmNameBackend": {
+      "value": "WS11"
+    },
+    "adminUsername": {
+      "value": "azureuser"
+    },
+    "adminPassword": {
+      "value": "Password123!"
+    },
+    "firewallName": {
+      "value": "myAzureFirewall"
+    },
+    "firewallSubnetName": {
+      "value": "AzureFirewallSubnet"
+    },
+    "publicIpName": {
+      "value": "firewallPublicIP"
     }
   }
 }

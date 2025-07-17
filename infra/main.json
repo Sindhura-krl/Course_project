@@ -27,6 +27,56 @@
           "contentVersion": "1.0.0.0"
         }
       }
+    },{
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "webvm-deployment",
+      "dependsOn": ["vnet-deployment"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/web-vm.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/param.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "backendvm-deployment",
+      "dependsOn": ["vnet-deployment"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/vm-backend.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/param.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "firewall-deployment",
+      "dependsOn": ["backendvm-deployment"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/firewall.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/param.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
     }
   ]
 }
