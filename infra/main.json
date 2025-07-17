@@ -170,7 +170,7 @@
                     "publicIpName": {
                         "value": "[parameters('publicIpName')]"
                     },
-                    "vnetNameEastUS2": {
+                    "vnetName": {
                         "value": "[parameters('vnetNameEastUS2')]"
                     }
                 }
