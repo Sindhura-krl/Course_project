@@ -19,11 +19,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/refs/heads/main/infra/network/vnets.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnets.json",
           "contentVersion": "1.0.0.0"
         },
         "parametersLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/refs/heads/main/infra/param.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/param.json",
           "contentVersion": "1.0.0.0"
         }
       }
