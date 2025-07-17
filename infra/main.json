@@ -112,7 +112,7 @@
           "subnetNameEastUS2": { "value": "[parameters('subnetNameEastUS2')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmSize": { "value": "[parameters('vmSizeEastUS')]" }
+          "vmSize": { "value": "[parameters('vmSize')]" }
         }
       }
     }
