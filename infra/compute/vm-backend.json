@@ -5,15 +5,26 @@
         "locationEastUS2": {
             "type": "string",
             "defaultValue": "eastus2"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "vmNameBackend": {
+            "type": "string"
+        },
+        "vnetNameEastUS2": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "ws-subnet"
         }
     },
     "variables": {
-        "vmName": "WS11",
-        "nicName": "ws11-nic",
-        "vnetName": "EastUS2-VNet",
-        "subnetName": "ws-subnet",
-        "adminUsername": "azureuser",
-        "adminPassword": "P@ssword12345!"
+        "nicName": "[concat(parameters('vmNameBackend'), '-nic')]"
     },
     "resources": [
         {
