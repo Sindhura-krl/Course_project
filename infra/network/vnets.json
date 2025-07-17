@@ -86,7 +86,7 @@
           {
             "name": "BlockSocialMediaCollection",
             "ruleCollectionType": "ApplicationRuleCollection",
-            "priority": 100,
+            "priority": 110,
             "action": {
               "type": "Deny"
             },
@@ -94,7 +94,7 @@
               {
                 "name": "BlockSocialMedia",
                 "ruleType": "ApplicationRule",
-                "sourceAddresses": [ "*" ],
+                "sourceAddresses": [ "0.0.0.0/0" ], 
                 "protocols": [
                   { "protocolType": "Http", "port": 80 },
                   { "protocolType": "Https", "port": 443 }
