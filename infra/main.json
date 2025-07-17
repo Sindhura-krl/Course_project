@@ -1,177 +1,183 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "locationEastUS": {
-      "type": "string",
-      "defaultValue": "eastus"
-    },
-    "locationEastUS2": {
-      "type": "string",
-      "defaultValue": "eastus2"
-    },
-    "vnetNameEastUS": {
-      "type": "string"
-    },
-    "vnetNameEastUS2": {
-      "type": "string"
-    },
-    "availabilitySetName": {
-      "type": "string"
-    },
-    "vmName1": {
-      "type": "string"
-    },
-    "vmName2": {
-      "type": "string"
-    },
-    "vmNameBackend": {
-      "type": "string"
-    },
-    "adminUsername": {
-      "type": "string"
-    },
-    "adminPassword": {
-      "type": "securestring"
-    },
-    "firewallName": {
-      "type": "string"
-    },
-    "firewallSubnetName": {
-      "type": "string"
-    },
-    "publicIpName": {
-      "type": "string"
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "vnet-deployment",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnets.json",
-          "contentVersion": "1.0.0.0"
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "locationEastUS": {
+            "type": "string",
+            "defaultValue": "eastus"
         },
-        "parameters": {
-          "locationEastUS": {
-            "value": "[parameters('locationEastUS')]"
-          },
-          "locationEastUS2": {
-            "value": "[parameters('locationEastUS2')]"
-          },
-          "vnetNameEastUS": {
-            "value": "[parameters('vnetNameEastUS')]"
-          },
-          "vnetNameEastUS2": {
-            "value": "[parameters('vnetNameEastUS2')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "webvm-deployment",
-      "dependsOn": [
-        "vnet-deployment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/web-vm.json",
-          "contentVersion": "1.0.0.0"
+        "locationEastUS2": {
+            "type": "string",
+            "defaultValue": "eastus2"
         },
-        "parameters": {
-          "locationEastUS": {
-            "value": "[parameters('locationEastUS')]"
-          },
-          "availabilitySetName": {
-            "value": "[parameters('availabilitySetName')]"
-          },
-          "vmName1": {
-            "value": "[parameters('vmName1')]"
-          },
-          "vmName2": {
-            "value": "[parameters('vmName2')]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "vnetNameEastUS": {
-            "value": "[parameters('vnetNameEastUS')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "backendvm-deployment",
-      "dependsOn": [
-        "vnet-deployment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/vm-backend.json",
-          "contentVersion": "1.0.0.0"
+        "vnetNameEastUS": {
+            "type": "string"
         },
-        "parameters": {
-          "locationEastUS2": {
-            "value": "[parameters('locationEastUS2')]"
-          },
-          "vmNameBackend": {
-            "value": "[parameters('vmNameBackend')]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "vnetNameEastUS2": {
-            "value": "[parameters('vnetNameEastUS2')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "firewall-deployment",
-      "dependsOn": [
-        "backendvm-deployment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/firewall.json",
-          "contentVersion": "1.0.0.0"
+        "vnetNameEastUS2": {
+            "type": "string"
         },
-        "parameters": {
-          "locationEastUS2": {
-            "value": "[parameters('locationEastUS2')]"
-          },
-          "firewallName": {
-            "value": "[parameters('firewallName')]"
-          },
-          "firewallSubnetName": {
-            "value": "[parameters('firewallSubnetName')]"
-          },
-          "publicIpName": {
-            "value": "[parameters('publicIpName')]"
-          },
-          "vnetNameEastUS2": {
-            "value": "[parameters('vnetNameEastUS2')]"
-          }
+        "availabilitySetName": {
+            "type": "string"
+        },
+        "vmName1": {
+            "type": "string"
+        },
+        "vmName2": {
+            "type": "string"
+        },
+        "vmNameBackend": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "firewallName": {
+            "type": "string"
+        },
+        "firewallSubnetName": {
+            "type": "string"
+        },
+        "publicIpName": {
+            "type": "string"
+        },
+        "nicPrefix": {
+            "type": "string"
+        },
+        "vmPrefix": {
+            "type": "string"
         }
-      }
-    }
-  ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "vnet-deployment",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnets.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "locationEastUS": {
+                        "value": "[parameters('locationEastUS')]"
+                    },
+                    "locationEastUS2": {
+                        "value": "[parameters('locationEastUS2')]"
+                    },
+                    "vnetNameEastUS": {
+                        "value": "[parameters('vnetNameEastUS')]"
+                    },
+                    "vnetNameEastUS2": {
+                        "value": "[parameters('vnetNameEastUS2')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "webvm-deployment",
+            "dependsOn": [
+                "vnet-deployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/web-vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "locationEastUS": {
+                        "value": "[parameters('locationEastUS')]"
+                    },
+                    "availabilitySetName": {
+                        "value": "[parameters('availabilitySetName')]"
+                    },
+                    "vmName1": {
+                        "value": "[parameters('vmName1')]"
+                    },
+                    "vmName2": {
+                        "value": "[parameters('vmName2')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "vnetNameEastUS": {
+                        "value": "[parameters('vnetNameEastUS')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "backendvm-deployment",
+            "dependsOn": [
+                "vnet-deployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/vm-backend.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "locationEastUS2": {
+                        "value": "[parameters('locationEastUS2')]"
+                    },
+                    "vmNameBackend": {
+                        "value": "[parameters('vmNameBackend')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "vnetNameEastUS2": {
+                        "value": "[parameters('vnetNameEastUS2')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "firewall-deployment",
+            "dependsOn": [
+                "backendvm-deployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/firewall.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "locationEastUS2": {
+                        "value": "[parameters('locationEastUS2')]"
+                    },
+                    "firewallName": {
+                        "value": "[parameters('firewallName')]"
+                    },
+                    "firewallSubnetName": {
+                        "value": "[parameters('firewallSubnetName')]"
+                    },
+                    "publicIpName": {
+                        "value": "[parameters('publicIpName')]"
+                    },
+                    "vnetNameEastUS2": {
+                        "value": "[parameters('vnetNameEastUS2')]"
+                    }
+                }
+            }
+        }
+    ]
 }
