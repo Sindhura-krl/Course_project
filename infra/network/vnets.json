@@ -95,7 +95,9 @@
                     "type": "ruleCollectionGroups",
                     "apiVersion": "2021-08-01",
                     "name": "DefaultApplicationRuleCollectionGroup",
-                    "dependsOn": [],
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
+                    ],
                     "properties": {
                         "priority": 100,
                         "ruleCollections": [
