@@ -26,10 +26,7 @@
     "adminPassword": {
       "value": "Password123"
     },
-    "vmSizeEastUS": {
-      "value": "Standard_B2ms"
-    },
-    "vmSizeEastUS2": {
+    "vmSize": {
       "value": "Standard_B2ms"
     }
   }
