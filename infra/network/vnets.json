@@ -68,6 +68,7 @@
       "type": "Microsoft.Network/firewallPolicies",
       "apiVersion": "2021-08-01",
       "name": "myFirewallPolicy",
+      "location": "[parameters('locationEastUS2')]",
       "properties": {
         "threatIntelMode": "Alert"
       }
