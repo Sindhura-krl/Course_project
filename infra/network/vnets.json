@@ -68,7 +68,6 @@
       "type": "Microsoft.Network/firewallPolicies",
       "apiVersion": "2021-08-01",
       "name": "myFirewallPolicy",
-      "location": "[parameters('locationEastUS2')]",
       "properties": {
         "threatIntelMode": "Alert"
       }
@@ -94,7 +93,7 @@
               {
                 "name": "BlockSocialMedia",
                 "ruleType": "ApplicationRule",
-                "sourceAddresses": [ "0.0.0.0/0" ], 
+                "sourceAddresses": ["0.0.0.0/0"], 
                 "protocols": [
                   { "protocolType": "Http", "port": 80 },
                   { "protocolType": "Https", "port": 443 }
