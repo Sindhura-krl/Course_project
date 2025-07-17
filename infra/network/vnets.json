@@ -2,48 +2,30 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": {
-      "type": "string"
-    },
-    "locationEastUS2": {
-      "type": "string"
-    },
-    "vnetNameEastUS": {
-      "type": "string"
-    },
-    "vnetNameEastUS2": {
-      "type": "string"
-    },
-    "subnetNameEastUS": {
-      "type": "string"
-    },
-    "subnetNameEastUS2": {
-      "type": "string"
-    },
-    "vmSizeEastUS":{
-      "type": "string" 
-    },
-    "vmSizeEastUS2": {
-       "type": "string" 
-      }
+    "locationEastUS": { "type": "string" },
+    "locationEastUS2": { "type": "string" }
+  },
+  "variables": {
+    "eastVNetName": "EastUS-VNet",
+    "east2VNetName": "EastUS2-VNet",
+    "eastVNetAddress": "10.0.0.0/16",
+    "east2VNetAddress": "10.1.0.0/16"
   },
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('vnetNameEastUS')]",
+      "apiVersion": "2023-04-01",
+      "name": "[variables('eastVNetName')]",
       "location": "[parameters('locationEastUS')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [
-            "10.0.0.0/16"
-          ]
+          "addressPrefixes": [ "[variables('eastVNetAddress')]" ]
         },
         "subnets": [
           {
-            "name": "[parameters('subnetNameEastUS')]",
+            "name": "web-subnet",
             "properties": {
-              "addressPrefix": "10.0.0.0/24"
+              "addressPrefix": "10.0.1.0/24"
             }
           }
         ]
@@ -51,29 +33,61 @@
     },
     {
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-02-01",
-      "name": "[parameters('vnetNameEastUS2')]",
+      "apiVersion": "2023-04-01",
+      "name": "[variables('east2VNetName')]",
       "location": "[parameters('locationEastUS2')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [
-            "10.1.0.0/16"
-          ]
+          "addressPrefixes": [ "[variables('east2VNetAddress')]" ]
         },
         "subnets": [
           {
-            "name": "[parameters('subnetNameEastUS2')]",
+            "name": "ws-subnet",
             "properties": {
-              "addressPrefix": "10.1.0.0/24"
-            }
-          },
-          {
-            "name": "AzureFirewallSubnet",
-            "properties": {
-              "addressPrefix": "10.1.1.0/26"
+              "addressPrefix": "10.1.1.0/24"
             }
           }
         ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2023-04-01",
+      "name": "[concat(variables('eastVNetName'), '/EastToEast2Peering')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('eastVNetName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
+      ],
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId(parameters('locationEastUS2'), 'Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
+        },
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": true,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "enableVirtualNetworkAccess": true,
+        "enableVmProtection": true
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2023-04-01",
+      "name": "[concat(variables('east2VNetName'), '/East2ToEastPeering')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('eastVNetName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
+      ],
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId(parameters('locationEastUS'), 'Microsoft.Network/virtualNetworks', variables('eastVNetName'))]"
+        },
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": true,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "enableVirtualNetworkAccess": true,
+        "enableVmProtection": true
       }
     }
   ]

@@ -2,116 +2,29 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": { "type": "string" },
-    "locationEastUS2": { "type": "string" },
-    "vnetNameEastUS": { "type": "string" },
-    "vnetNameEastUS2": { "type": "string" },
-    "subnetNameEastUS": { "type": "string" },
-    "subnetNameEastUS2": { "type": "string" },
-    "adminUsername": { "type": "string" },
-    "adminPassword": { "type": "securestring" },
-    "vmSize": { "type": "string" }
+    "locationEastUS": {
+      "type": "string",
+      "defaultValue": "eastus"
+    },
+    "locationEastUS2": {
+      "type": "string",
+      "defaultValue": "eastus2"
+    }
   },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "deployVNets",
+      "name": "vnet-deployment",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnets.json",
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/refs/heads/main/infra/network/vnets.json",
           "contentVersion": "1.0.0.0"
         },
-        "parameters": {
-          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
-          "locationEastUS2": { "value": "[parameters('locationEastUS2')]" },
-          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
-          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" },
-          "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
-          "subnetNameEastUS2": { "value": "[parameters('subnetNameEastUS2')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "name": "deployPeering",
-      "dependsOn": ["deployVNets"],
-      "apiVersion": "2021-04-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/vnet-peering.json",
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/refs/heads/main/infra/param.json",
           "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
-          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "name": "deployLoadBalancer",
-      "dependsOn": ["deployVNets"],
-      "apiVersion": "2021-04-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/network/loadbalancer.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
-          "backendPoolVMs": {
-            "value": [
-              "[resourceId('Microsoft.Network/networkInterfaces', 'w1-nic')]",
-              "[resourceId('Microsoft.Network/networkInterfaces', 'w2-nic')]"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "name": "deployCompute",
-      "dependsOn": ["deployPeering","deployLoadBalancer"],
-      "apiVersion": "2021-04-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/web-vms.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "locationEastUS": { "value": "[parameters('locationEastUS')]" },
-          "vnetNameEastUS": { "value": "[parameters('vnetNameEastUS')]" },
-          "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
-          "adminUsername": { "value": "[parameters('adminUsername')]" },
-          "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmSize": { "value": "[parameters('vmSize')]" },
-          "loadBalancerName": { "value": "myLoadBalancer" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "name": "deployBackend",
-      "dependsOn": ["deployCompute"],
-      "apiVersion": "2021-04-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/ws11-vm.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "locationEastUS2": { "value": "[parameters('locationEastUS2')]" },
-          "vnetNameEastUS2": { "value": "[parameters('vnetNameEastUS2')]" },
-          "subnetNameEastUS2": { "value": "[parameters('subnetNameEastUS2')]" },
-          "adminUsername": { "value": "[parameters('adminUsername')]" },
-          "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmSize": { "value": "[parameters('vmSize')]" }
         }
       }
     }
