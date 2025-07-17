@@ -2,43 +2,64 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": {
-      "type": "string"
-    },
-    "vnetNameEastUS": {
-      "type": "string"
-    },
-    "subnetNameEastUS": {
-      "type": "string"
-    },
     "adminUsername": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Admin username for the VMs"
+      }
     },
     "adminPassword": {
-      "type": "securestring"
+      "type": "secureString",
+      "metadata": {
+        "description": "Admin password for the VMs"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS1_v2",
+      "metadata": {
+        "description": "Size of the virtual machines"
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer"
+    },
+    "imageOffer": {
+      "type": "string",
+      "defaultValue": "WindowsServer"
+    },
+    "imageSku": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter"
+    },
+    "subnetId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet resource ID"
+      }
+    },
+    "loadBalancerBackendPoolId": {
+      "type": "string",
+      "metadata": {
+        "description": "ID of the backend address pool in the Load Balancer"
+      }
+    },
+    "location": {
+      "type": "string"
     }
   },
   "variables": {
-    "vmNames": [
-      "w1",
-      "w2"
-    ],
-    "nicNames": [
-      "w1-nic",
-      "w2-nic"
-    ],
-    "pipNames": [
-      "w1-pip",
-      "w2-pip"
-    ],
-    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS'), parameters('subnetNameEastUS'))]"
+    "availabilitySetName": "webAvailabilitySet",
+    "vmCount": 2,
+    "vmNamePrefix": "w"
   },
   "resources": [
     {
       "type": "Microsoft.Compute/availabilitySets",
       "apiVersion": "2022-03-01",
-      "name": "myAvailSet",
-      "location": "[parameters('locationEastUS')]",
+      "name": "[variables('availabilitySetName')]",
+      "location": "[parameters('location')]",
       "properties": {
         "platformFaultDomainCount": 2,
         "platformUpdateDomainCount": 5
@@ -49,48 +70,47 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2021-05-01",
-      "name": "[variables('pipNames')[copyIndex()]]",
-      "location": "[parameters('locationEastUS')]",
+      "apiVersion": "2022-05-01",
+      "name": "[format('{0}PublicIP', concat(variables('vmNamePrefix'), copyIndex(1)))]",
+      "location": "[parameters('location')]",
       "copy": {
-        "name": "pipCopy",
-        "count": 2
+        "name": "publicIPCopy",
+        "count": "[variables('vmCount')]"
       },
       "properties": {
-        "publicIPAllocationMethod": "Static"
-      },
-      "sku": {
-        "name": "Standard"
+        "publicIPAllocationMethod": "Static",
+        "sku": {
+          "name": "Standard"
+        }
       }
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2021-05-01",
-      "name": "[variables('nicNames')[copyIndex()]]",
-      "location": "[parameters('locationEastUS')]",
+      "apiVersion": "2022-05-01",
+      "name": "[format('{0}Nic', concat(variables('vmNamePrefix'), copyIndex(1)))]",
+      "location": "[parameters('location')]",
       "copy": {
         "name": "nicCopy",
-        "count": 2
+        "count": "[variables('vmCount')]"
       },
       "dependsOn": [
-        "pipCopy",
-        "[resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer')]"
+        "[concat('Microsoft.Network/publicIPAddresses/', format('{0}PublicIP', concat(variables('vmNamePrefix'), copyIndex(1))))]"
       ],
       "properties": {
         "ipConfigurations": [
           {
-            "name": "ipconfig1",
+            "name": "ipConfig1",
             "properties": {
               "subnet": {
-                "id": "[variables('subnetId')]"
+                "id": "[parameters('subnetId')]"
               },
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipNames')[copyIndex()])]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}PublicIP', concat(variables('vmNamePrefix'), copyIndex(1))))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
-                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer'), '/backendAddressPools/myBackEndPool')]"
+                  "id": "[parameters('loadBalancerBackendPoolId')]"
                 }
               ]
             }
@@ -100,49 +120,56 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2022-03-01",
-      "name": "[variables('vmNames')[copyIndex()]]",
-      "location": "[parameters('locationEastUS')]",
+      "apiVersion": "2022-08-01",
+      "name": "[concat(variables('vmNamePrefix'), copyIndex(1))]",
+      "location": "[parameters('location')]",
       "copy": {
         "name": "vmCopy",
-        "count": 2
+        "count": "[variables('vmCount')]"
       },
       "dependsOn": [
-        "nicCopy"
+        "[concat('Microsoft.Network/networkInterfaces/', format('{0}Nic', concat(variables('vmNamePrefix'), copyIndex(1))))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
       ],
       "properties": {
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', 'myAvailSet')]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
         },
         "hardwareProfile": {
-          "vmSize": "Standard_B2ms"
+          "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('vmNames')[copyIndex()]]",
+          "computerName": "[concat(variables('vmNamePrefix'), copyIndex(1))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicNames')[copyIndex()])]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', format('{0}Nic', concat(variables('vmNamePrefix'), copyIndex(1))))]"
             }
           ]
         },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2016-Datacenter",
-            "version": "latest"
-          },
-          "osDisk": {
-            "createOption": "FromImage",
-            "managedDisk": {
-              "storageAccountType": "Premium_LRS"
-            }
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
           }
         }
+      },
+      "tags": {
+        "Environment": "Dev",
+        "Role": "WebServer"
       }
     }
   ]

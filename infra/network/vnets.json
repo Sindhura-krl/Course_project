@@ -19,7 +19,13 @@
     },
     "subnetNameEastUS2": {
       "type": "string"
-    }
+    },
+    "vmSizeEastUS":{
+      "type": "string" 
+    },
+    "vmSizeEastUS2": {
+       "type": "string" 
+      }
   },
   "resources": [
     {
