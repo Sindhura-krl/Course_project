@@ -41,8 +41,11 @@
             "apiVersion": "2023-04-01",
             "name": "web-lb-pip",
             "location": "[parameters('locationEastUS')]",
+            "sku": {
+                "name": "Standard"
+            },
             "properties": {
-                "publicIPAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Static"
             }
         },
         {
@@ -63,6 +66,9 @@
             "dependsOn": [
                 "web-lb-pip"
             ],
+            "sku": {
+                "name": "Standard"
+            },
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -157,7 +163,7 @@
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_B1s"
+                    "vmSize": "Standard_B1ms"
                 },
                 "osProfile": {
                     "computerName": "[concat(parameters('vmPrefix'), copyIndex())]",
