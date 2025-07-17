@@ -94,7 +94,7 @@
         {
             "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
             "apiVersion": "2021-08-01",
-            "name": "myFirewallPolicy/DefaultApplicationRuleCollectionGroup",
+            "name": "[format('{0}/{1}', 'myFirewallPolicy', 'DefaultApplicationRuleCollectionGroup')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
             ],
