@@ -2,12 +2,24 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": { "type": "string" },
-    "locationEastUS2": { "type": "string" },
-    "vnetNameEastUS": { "type": "string" },
-    "vnetNameEastUS2": { "type": "string" },
-    "subnetNameEastUS": { "type": "string" },
-    "subnetNameEastUS2": { "type": "string" }
+    "locationEastUS": {
+      "type": "string"
+    },
+    "locationEastUS2": {
+      "type": "string"
+    },
+    "vnetNameEastUS": {
+      "type": "string"
+    },
+    "vnetNameEastUS2": {
+      "type": "string"
+    },
+    "subnetNameEastUS": {
+      "type": "string"
+    },
+    "subnetNameEastUS2": {
+      "type": "string"
+    }
   },
   "resources": [
     {
@@ -17,7 +29,9 @@
       "location": "[parameters('locationEastUS')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": ["10.0.0.0/16"]
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
         },
         "subnets": [
           {
@@ -36,7 +50,9 @@
       "location": "[parameters('locationEastUS2')]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": ["10.1.0.0/16"]
+          "addressPrefixes": [
+            "10.1.0.0/16"
+          ]
         },
         "subnets": [
           {
@@ -59,7 +75,9 @@
       "apiVersion": "2021-05-01",
       "name": "myFirewallPublicIP",
       "location": "[parameters('locationEastUS2')]",
-      "sku": { "name": "Standard" },
+      "sku": {
+        "name": "Standard"
+      },
       "properties": {
         "publicIPAllocationMethod": "Static"
       }
@@ -94,10 +112,18 @@
               {
                 "name": "BlockSocialMedia",
                 "ruleType": "ApplicationRule",
-                "sourceAddresses": ["*"],
+                "sourceAddresses": [
+                  "*"
+                ],
                 "protocols": [
-                  { "protocolType": "Http", "port": 80 },
-                  { "protocolType": "Https", "port": 443 }
+                  {
+                    "protocolType": "Http",
+                    "port": 80
+                  },
+                  {
+                    "protocolType": "Https",
+                    "port": 443
+                  }
                 ],
                 "targetFqdns": [
                   "facebook.com",
