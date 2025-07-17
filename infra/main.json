@@ -90,7 +90,7 @@
           "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmSize": { "value": "[parameters('vmSizeEastUS')]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
           "loadBalancerName": { "value": "myLoadBalancer" }
         }
       }
