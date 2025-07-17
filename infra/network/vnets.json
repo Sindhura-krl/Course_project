@@ -89,7 +89,57 @@
             "location": "[parameters('locationEastUS2')]",
             "properties": {
                 "threatIntelMode": "Alert"
-            }
+            },
+            "resources": [
+                {
+                    "type": "ruleCollectionGroups",
+                    "apiVersion": "2021-08-01",
+                    "name": "DefaultApplicationRuleCollectionGroup",
+                    "dependsOn": [],
+                    "properties": {
+                        "priority": 100,
+                        "ruleCollections": [
+                            {
+                                "name": "BlockSocialMediaCollection",
+                                "ruleCollectionType": "ApplicationRuleCollection",
+                                "priority": 100,
+                                "action": {
+                                    "type": "Deny"
+                                },
+                                "rules": [
+                                    {
+                                        "name": "BlockSocialMedia",
+                                        "ruleType": "ApplicationRule",
+                                        "sourceAddresses": [
+                                            "*"
+                                        ],
+                                        "protocols": [
+                                            {
+                                                "protocolType": "Http",
+                                                "port": 80
+                                            },
+                                            {
+                                                "protocolType": "Https",
+                                                "port": 443
+                                            }
+                                        ],
+                                        "targetFqdns": [
+                                            "www.facebook.com",
+                                            "*.facebook.com",
+                                            "www.twitter.com",
+                                            "*.twitter.com",
+                                            "www.instagram.com",
+                                            "*.instagram.com",
+                                            "www.tiktok.com",
+                                            "*.tiktok.com"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Network/azureFirewalls",
@@ -122,58 +172,6 @@
                 "firewallPolicy": {
                     "id": "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-            "apiVersion": "2021-08-01",
-            "name": "myFirewallPolicy-rcg",
-            "location": "[parameters('locationEastUS2')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
-            ],
-            "properties": {
-                "priority": 100,
-                "ruleCollections": [
-                    {
-                        "name": "BlockSocialMediaCollection",
-                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
-                        "action": {
-                            "type": "Deny"
-                        },
-                        "rules": [
-                            {
-                                "ruleType": "ApplicationRule",
-                                "name": "BlockSocialMedia",
-                                "description": "Block social media access",
-                                "sourceAddresses": [
-                                    "*"
-                                ],
-                                "protocols": [
-                                    {
-                                        "protocolType": "Https",
-                                        "port": 443
-                                    },
-                                    {
-                                        "protocolType": "Http",
-                                        "port": 80
-                                    }
-                                ],
-                                "targetFqdns": [
-                                    "www.facebook.com",
-                                    "*.facebook.com",
-                                    "www.twitter.com",
-                                    "*.twitter.com",
-                                    "www.instagram.com",
-                                    "*.instagram.com",
-                                    "www.tiktok.com",
-                                    "*.tiktok.com"
-                                ]
-                            }
-                        ],
-                        "priority": 100
-                    }
-                ]
             }
         },
         {
