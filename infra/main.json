@@ -67,12 +67,6 @@
                     },
                     "locationEastUS2": {
                         "value": "[parameters('locationEastUS2')]"
-                    },
-                    "vnetNameEastUS": {
-                        "value": "[parameters('vnetNameEastUS')]"
-                    },
-                    "vnetNameEastUS2": {
-                        "value": "[parameters('vnetNameEastUS2')]"
                     }
                 }
             }
@@ -97,11 +91,11 @@
                     "availabilitySetName": {
                         "value": "[parameters('availabilitySetName')]"
                     },
-                    "vmName1": {
-                        "value": "[parameters('vmName1')]"
+                    "vmPrefix": {
+                        "value": "[parameters('vmPrefix')]"
                     },
-                    "vmName2": {
-                        "value": "[parameters('vmName2')]"
+                    "nicPrefix": {
+                        "value": "[parameters('nicPrefix')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -111,6 +105,9 @@
                     },
                     "vnetNameEastUS": {
                         "value": "[parameters('vnetNameEastUS')]"
+                    },
+                    "subnetName": {
+                        "value": "web-subnet"
                     }
                 }
             }

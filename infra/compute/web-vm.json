@@ -152,7 +152,7 @@
                 "count": 2
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('nicPrefix'), copyIndex()))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nicPrefix'), copyIndex()))]",
                 "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
             ],
             "properties": {
