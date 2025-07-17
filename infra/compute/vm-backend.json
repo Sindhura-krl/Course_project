@@ -39,7 +39,6 @@
                         "properties": {
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS2'), parameters('subnetName'))]"
-
                             },
                             "privateIPAllocationMethod": "Dynamic"
                         }
@@ -72,7 +71,10 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "createOption": "FromImage"
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
                     }
                 },
                 "networkProfile": {
