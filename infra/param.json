@@ -7,27 +7,6 @@
     },
     "locationEastUS2": {
       "value": "eastus2"
-    },
-    "vnetNameEastUS": {
-      "value": "vnet-eastus"
-    },
-    "vnetNameEastUS2": {
-      "value": "vnet-eastus2"
-    },
-    "subnetNameEastUS": {
-      "value": "subnet1"
-    },
-    "subnetNameEastUS2": {
-      "value": "subnet2"
-    },
-    "adminUsername": {
-      "value": "azureuser"
-    },
-    "adminPassword": {
-      "value": "Password123"
-    },
-    "vmSize": {
-      "value": "Standard_B2ms"
     }
   }
 }
