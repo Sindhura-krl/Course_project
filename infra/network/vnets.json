@@ -57,6 +57,39 @@
           }
         ]
       }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2023-04-01",
+      "name": "[format('{0}/EastUS-to-EastUS2', parameters('eastVNetName'))]",
+      "resourceGroup": "[parameters('resourceGroupName')]",
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Network/virtualNetworks', parameters('east2VNetName'))]"
+        },
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2023-04-01",
+      "name": "[format('{0}/EastUS2-to-EastUS', parameters('east2VNetName'))]",
+      "resourceGroup": "[parameters('resourceGroupName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('resourceGroupName'), parameters('eastVNetName'), 'EastUS-to-EastUS2')]"
+      ],
+      "properties": {
+        "remoteVirtualNetwork": {
+          "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Network/virtualNetworks', parameters('eastVNetName'))]"
+        },
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false
+      }
     }
   ]
 }
