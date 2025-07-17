@@ -10,8 +10,7 @@
     "subnetNameEastUS2": { "type": "string" },
     "adminUsername": { "type": "string" },
     "adminPassword": { "type": "securestring" },
-    "vmSizeEastUS": { "type": "string" },
-    "vmSizeEastUS2": { "type": "string" }
+    "vmSize": { "type": "string" }
   },
   "resources": [
     {
