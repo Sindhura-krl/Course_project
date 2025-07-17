@@ -2,13 +2,35 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "locationEastUS": { "value": "eastus" },
-    "locationEastUS2": { "value": "eastus2" },
-    "vnetNameEastUS": { "value": "vnet-eastus" },
-    "vnetNameEastUS2": { "value": "vnet-eastus2" },
-    "subnetNameEastUS": { "value": "subnet1" },
-    "subnetNameEastUS2": { "value": "subnet2" },
-    "adminUsername": { "value": "azureuser" },
-    "adminPassword": { "value": "YourP@ssw0rd123" }
+    "locationEastUS": {
+      "value": "eastus"
+    },
+    "locationEastUS2": {
+      "value": "eastus2"
+    },
+    "vnetNameEastUS": {
+      "value": "vnet-eastus"
+    },
+    "vnetNameEastUS2": {
+      "value": "vnet-eastus2"
+    },
+    "subnetNameEastUS": {
+      "value": "subnet1"
+    },
+    "subnetNameEastUS2": {
+      "value": "subnet2"
+    },
+    "adminUsername": {
+      "value": "azureuser"
+    },
+    "adminPassword": {
+      "value": "Password123"
+    },
+    "vmSizeEastUS": {
+      "value": "Standard_B2ms"
+    },
+    "vmSizeEastUS2": {
+      "value": "Standard_B2ms"
+    }
   }
 }
