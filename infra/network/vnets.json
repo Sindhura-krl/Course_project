@@ -1,199 +1,171 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "locationEastUS": {
-            "type": "string"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "locationEastUS": { "type": "string" },
+    "locationEastUS2": { "type": "string" },
+    "vnetNameEastUS": { "type": "string" },
+    "vnetNameEastUS2": { "type": "string" },
+    "subnetNameEastUS": { "type": "string" },
+    "subnetNameEastUS2": { "type": "string" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('vnetNameEastUS')]",
+      "location": "[parameters('locationEastUS')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [ "10.0.0.0/16" ]
         },
-        "locationEastUS2": {
-            "type": "string"
-        },
-        "vnetNameEastUS": {
-            "type": "string"
-        },
-        "vnetNameEastUS2": {
-            "type": "string"
-        },
-        "subnetNameEastUS": {
-            "type": "string"
-        },
-        "subnetNameEastUS2": {
-            "type": "string"
-        }
+        "subnets": [
+          {
+            "name": "[parameters('subnetNameEastUS')]",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
     },
-    "resources": [
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2021-02-01",
-            "name": "[parameters('vnetNameEastUS')]",
-            "location": "[parameters('locationEastUS')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetNameEastUS')]",
-                        "properties": {
-                            "addressPrefix": "10.0.0.0/24"
-                        }
-                    }
-                ]
-            }
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('vnetNameEastUS2')]",
+      "location": "[parameters('locationEastUS2')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [ "10.1.0.0/16" ]
         },
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2021-02-01",
-            "name": "[parameters('vnetNameEastUS2')]",
-            "location": "[parameters('locationEastUS2')]",
+        "subnets": [
+          {
+            "name": "[parameters('subnetNameEastUS2')]",
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.1.0.0/16"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetNameEastUS2')]",
-                        "properties": {
-                            "addressPrefix": "10.1.0.0/24"
-                        }
-                    },
-                    {
-                        "name": "AzureFirewallSubnet",
-                        "properties": {
-                            "addressPrefix": "10.1.1.0/26"
-                        }
-                    }
-                ]
+              "addressPrefix": "10.1.0.0/24"
             }
-        },
-        {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2021-05-01",
-            "name": "myFirewallPublicIP",
-            "location": "[parameters('locationEastUS2')]",
-            "sku": {
-                "name": "Standard"
+          },
+          {
+            "name": "AzureFirewallSubnet",
+            "properties": {
+              "addressPrefix": "10.1.1.0/26"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2021-05-01",
+      "name": "myFirewallPublicIP",
+      "location": "[parameters('locationEastUS2')]",
+      "sku": { "name": "Standard" },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies",
+      "apiVersion": "2021-08-01",
+      "name": "myFirewallPolicy",
+      "location": "[parameters('locationEastUS2')]",
+      "properties": {
+        "threatIntelMode": "Alert"
+      }
+    },
+    {
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+      "apiVersion": "2021-08-01",
+      "name": "[format('{0}/{1}', 'myFirewallPolicy', 'DefaultApplicationRuleCollectionGroup')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
+      ],
+      "properties": {
+        "priority": 100,
+        "ruleCollections": [
+          {
+            "name": "BlockSocialMediaCollection",
+            "ruleCollectionType": "ApplicationRuleCollection",
+            "priority": 100,
+            "action": {
+              "type": "Deny"
             },
-            "properties": {
-                "publicIPAllocationMethod": "Static"
-            }
-        },
-        {
-            "type": "Microsoft.Network/firewallPolicies",
-            "apiVersion": "2021-08-01",
-            "name": "myFirewallPolicy",
-            "location": "[parameters('locationEastUS2')]",
-            "properties": {
-                "threatIntelMode": "Alert"
-            }
-        },
-        {
-            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-            "apiVersion": "2021-08-01",
-            "name": "[format('{0}/{1}', 'myFirewallPolicy', 'DefaultApplicationRuleCollectionGroup')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
-            ],
-            "properties": {
-                "priority": 100,
-                "ruleCollections": [
-                    {
-                        "name": "BlockSocialMediaCollection",
-                        "ruleCollectionType": "ApplicationRuleCollection",
-                        "priority": 100,
-                        "action": {
-                            "type": "Deny"
-                        },
-                        "rules": [
-                            {
-                                "name": "BlockSocialMedia",
-                                "ruleType": "ApplicationRule",
-                                "sourceAddresses": [
-                                    "*"
-                                ],
-                                "protocols": [
-                                    {
-                                        "protocolType": "Http",
-                                        "port": 80
-                                    },
-                                    {
-                                        "protocolType": "Https",
-                                        "port": 443
-                                    }
-                                ],
-                                "targetFqdns": [
-                                    "www.facebook.com",
-                                    "*.facebook.com",
-                                    "www.twitter.com",
-                                    "*.twitter.com",
-                                    "www.instagram.com",
-                                    "*.instagram.com",
-                                    "www.tiktok.com",
-                                    "*.tiktok.com"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/azureFirewalls",
-            "apiVersion": "2021-08-01",
-            "name": "myAzureFirewall",
-            "location": "[parameters('locationEastUS2')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetNameEastUS2'))]",
-                "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
-            ],
-            "properties": {
-                "sku": {
-                    "name": "AZFW_VNet",
-                    "tier": "Standard"
-                },
-                "ipConfigurations": [
-                    {
-                        "name": "azureFirewallIpConfig",
-                        "properties": {
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS2'), 'AzureFirewallSubnet')]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
-                            }
-                        }
-                    }
+            "rules": [
+              {
+                "name": "BlockSocialMedia",
+                "ruleType": "ApplicationRule",
+                "sourceAddresses": [ "*" ],
+                "protocols": [
+                  { "protocolType": "Http", "port": 80 },
+                  { "protocolType": "Https", "port": 443 }
                 ],
-                "firewallPolicy": {
-                    "id": "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables",
-            "apiVersion": "2021-02-01",
-            "name": "myRouteTable",
-            "location": "[parameters('locationEastUS2')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/azureFirewalls', 'myAzureFirewall')]"
-            ],
-            "properties": {
-                "routes": [
-                    {
-                        "name": "default-route",
-                        "properties": {
-                            "addressPrefix": "0.0.0.0/0",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[reference(resourceId('Microsoft.Network/azureFirewalls', 'myAzureFirewall'), '2021-08-01').ipConfigurations[0].properties.privateIPAddress]"
-                        }
-                    }
+                "targetFqdns": [
+                  "*.facebook.com",
+                  "*.twitter.com",
+                  "*.instagram.com",
+                  "*.tiktok.com"
                 ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/azureFirewalls",
+      "apiVersion": "2021-08-01",
+      "name": "myAzureFirewall",
+      "location": "[parameters('locationEastUS2')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetNameEastUS2'))]",
+        "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
+      ],
+      "properties": {
+        "sku": {
+          "name": "AZFW_VNet",
+          "tier": "Standard"
+        },
+        "ipConfigurations": [
+          {
+            "name": "azureFirewallIpConfig",
+            "properties": {
+              "privateIPAddress": "10.1.1.4",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS2'), 'AzureFirewallSubnet')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
+              }
             }
+          }
+        ],
+        "firewallPolicy": {
+          "id": "[resourceId('Microsoft.Network/firewallPolicies', 'myFirewallPolicy')]"
         }
-    ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2021-02-01",
+      "name": "myRouteTable",
+      "location": "[parameters('locationEastUS2')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/azureFirewalls', 'myAzureFirewall')]"
+      ],
+      "properties": {
+        "routes": [
+          {
+            "name": "default-route",
+            "properties": {
+              "addressPrefix": "0.0.0.0/0",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "10.1.1.4"
+            }
+          }
+        ]
+      }
+    }
+  ]
 }
