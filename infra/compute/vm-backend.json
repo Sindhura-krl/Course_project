@@ -1,76 +1,76 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "locationEastUS2": {
-      "type": "string",
-      "defaultValue": "eastus2"
-    }
-  },
-  "variables": {
-    "vmName": "WS11",
-    "nicName": "ws11-nic",
-    "vnetName": "EastUS2-VNet",
-    "subnetName": "ws-subnet",
-    "adminUsername": "azureuser",
-    "adminPassword": "P@ssword12345!"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2023-04-01",
-      "name": "[variables('nicName')]",
-      "location": "[parameters('locationEastUS2')]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
-              },
-              "privateIPAllocationMethod": "Dynamic"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2023-03-01",
-      "name": "[variables('vmName')]",
-      "location": "[parameters('locationEastUS2')]",
-      "dependsOn": [
-        "[variables('nicName')]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_B1s"
-        },
-        "osProfile": {
-          "computerName": "[variables('vmName')]",
-          "adminUsername": "[variables('adminUsername')]",
-          "adminPassword": "[variables('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2019-Datacenter",
-            "version": "latest"
-          },
-          "osDisk": {
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
-            }
-          ]
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "locationEastUS2": {
+            "type": "string",
+            "defaultValue": "eastus2"
         }
-      }
-    }
-  ]
+    },
+    "variables": {
+        "vmName": "WS11",
+        "nicName": "ws11-nic",
+        "vnetName": "EastUS2-VNet",
+        "subnetName": "ws-subnet",
+        "adminUsername": "azureuser",
+        "adminPassword": "P@ssword12345!"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-04-01",
+            "name": "[variables('nicName')]",
+            "location": "[parameters('locationEastUS2')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "name": "[variables('vmName')]",
+            "location": "[parameters('locationEastUS2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1s"
+                },
+                "osProfile": {
+                    "computerName": "[variables('vmName')]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[variables('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
 }
