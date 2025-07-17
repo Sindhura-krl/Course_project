@@ -78,7 +78,6 @@
       "name": "deployCompute",
       "dependsOn": ["deployPeering","deployLoadBalancer"],
       "apiVersion": "2021-04-01",
-      "loadBalancerName": { "value": "myLoadBalancer" },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -91,7 +90,8 @@
           "subnetNameEastUS": { "value": "[parameters('subnetNameEastUS')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmSize": { "value": "[parameters('vmSizeEastUS')]" }
+          "vmSize": { "value": "[parameters('vmSizeEastUS')]" },
+          "loadBalancerName": { "value": "myLoadBalancer" }
         }
       }
     },
