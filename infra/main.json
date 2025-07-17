@@ -92,7 +92,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "name": "deployLoadBalancer",
-      "dependsOn": ["deployCompute","deployPeering"],
+      "dependsOn": ["deployCompute"],
       "apiVersion": "2021-04-01",
       "properties": {
         "mode": "Incremental",
