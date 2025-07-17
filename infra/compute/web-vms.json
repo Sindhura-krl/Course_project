@@ -19,26 +19,34 @@
     }
   },
   "variables": {
-    "vmNames": [ "w1", "w2" ],
-    "nicNames": [ "w1-nic", "w2-nic" ],
-    "pipNames": [ "w1-pip", "w2-pip" ],
+    "vmNames": [
+      "w1",
+      "w2"
+    ],
+    "nicNames": [
+      "w1-nic",
+      "w2-nic"
+    ],
+    "pipNames": [
+      "w1-pip",
+      "w2-pip"
+    ],
     "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetNameEastUS'), parameters('subnetNameEastUS'))]"
   },
   "resources": [
     {
-        "type": "Microsoft.Compute/availabilitySets",
-        "apiVersion": "2022-03-01",
-        "name": "myAvailSet",
-        "location": "[parameters('locationEastUS')]",
-        "properties": {
-            "platformFaultDomainCount": 2,
-            "platformUpdateDomainCount": 5
-        },
-        "sku": {
-            "name": "Aligned"
-        }
+      "type": "Microsoft.Compute/availabilitySets",
+      "apiVersion": "2022-03-01",
+      "name": "myAvailSet",
+      "location": "[parameters('locationEastUS')]",
+      "properties": {
+        "platformFaultDomainCount": 2,
+        "platformUpdateDomainCount": 5
+      },
+      "sku": {
+        "name": "Aligned"
+      }
     },
-
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-05-01",
@@ -65,7 +73,8 @@
         "count": 2
       },
       "dependsOn": [
-        "pipCopy"
+        "pipCopy",
+        "[resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer')]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -81,9 +90,9 @@
               },
               "loadBalancerBackendAddressPools": [
                 {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer'), '/backendAddressPools/myBackEndPool')]"
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'myLoadBalancer'), '/backendAddressPools/myBackEndPool')]"
                 }
-            ]
+              ]
             }
           }
         ]
@@ -103,7 +112,7 @@
       ],
       "properties": {
         "availabilitySet": {
-            "id": "[resourceId('Microsoft.Compute/availabilitySets', 'myAvailSet')]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', 'myAvailSet')]"
         },
         "hardwareProfile": {
           "vmSize": "Standard_B2ms"
