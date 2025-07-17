@@ -85,7 +85,7 @@
         "ruleCollections": [
           {
             "name": "BlockSocialMediaCollection",
-            "ruleCollectionType": "ApplicationRuleCollection",
+            "ruleCollectionType": "FirewallPolicyApplicationRuleCollection",
             "priority": 110,
             "action": {
               "type": "Deny"
