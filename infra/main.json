@@ -48,6 +48,18 @@
         },
         "vmPrefix": {
             "type": "string"
+        },
+        "rdGatewayVmName": {
+            "type": "string",
+            "defaultValue": "RDGatewayVM"
+        },
+        "rdGatewayPublicIp": {
+            "type": "string",
+            "defaultValue": "rdgatewayPublicIP"
+        },
+        "rdGatewayNsg": {
+            "type": "string",
+            "defaultValue": "rdgatewayNSG"
         }
     },
     "resources": [
@@ -172,6 +184,47 @@
                     },
                     "vnetName": {
                         "value": "[parameters('vnetNameEastUS2')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "rdgateway-deployment",
+            "dependsOn": [
+                "vnet-deployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/Sindhura-krl/Course_project/main/infra/compute/rdgateway-vm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('rdGatewayVmName')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "vnetName": {
+                        "value": "[parameters('vnetNameEastUS')]"
+                    },
+                    "subnetName": {
+                        "value": "default"
+                    },
+                    "publicIpName": {
+                        "value": "[parameters('rdGatewayPublicIp')]"
+                    },
+                    "nsgName": {
+                        "value": "[parameters('rdGatewayNsg')]"
+                    },
+                    "location": {
+                        "value": "[parameters('locationEastUS')]"
                     }
                 }
             }
