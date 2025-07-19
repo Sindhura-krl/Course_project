@@ -46,15 +46,6 @@
     },
     "vmPrefix": {
       "value": "webvm"
-    },
-    "rdGatewayVmName": {
-      "value": "RDGatewayVM"
-    },
-    "rdGatewayPublicIp": {
-      "value": "rdgatewayPublicIP"
-    },
-    "rdGatewayNsg": {
-      "value": "rdgatewayNSG"
     }
   }
 }
