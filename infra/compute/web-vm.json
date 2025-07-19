@@ -154,7 +154,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
-            "name": "[concat(parameters('vmPrefix'), copyIndex())]",
+            "name": "[concat(parameters('vmPrefix'), string(add(copyIndex(), 1)))]",
             "location": "[parameters('locationEastUS')]",
             "copy": {
                 "name": "vmCopy",
