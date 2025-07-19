@@ -83,7 +83,7 @@
           "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('east2VNetName'))]"
         },
         "allowVirtualNetworkAccess": true,
-        "allowForwardedTraffic": false,
+        "allowForwardedTraffic": true,
         "allowGatewayTransit": false,
         "useRemoteGateways": false
       }
@@ -100,7 +100,7 @@
           "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('eastVNetName'))]"
         },
         "allowVirtualNetworkAccess": true,
-        "allowForwardedTraffic": false,
+        "allowForwardedTraffic": true,
         "allowGatewayTransit": false,
         "useRemoteGateways": false
       }
