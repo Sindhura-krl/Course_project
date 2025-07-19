@@ -61,7 +61,6 @@
             "type": "string",
             "defaultValue": "rdgatewayNSG"
         }
-        
     },
     "resources": [
         {
@@ -216,7 +215,7 @@
                         "value": "[parameters('vnetNameEastUS')]"
                     },
                     "subnetName": {
-                        "value": "default"
+                        "value": "rdGateway-subnet"
                     },
                     "publicIpName": {
                         "value": "[parameters('rdGatewayPublicIp')]"
@@ -230,6 +229,5 @@
                 }
             }
         }
-        
     ]
 }
