@@ -81,6 +81,9 @@
             "apiVersion": "2023-07-01",
             "name": "[parameters('vmName')]",
             "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+            ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_B1ms"

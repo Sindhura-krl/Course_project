@@ -6,16 +6,16 @@
       "value": "RDGatewayVM"
     },
     "location": {
-      "value": "eastus2"
+      "value": "eastus"
     },
     "vnetName": {
-      "value": "EastUS2-VNet"
+      "value": "EastUS-VNet"
     },
     "subnetName": {
       "value": "rdGateway-subnet"
     },
     "adminUsername": {
-      "value": "azureadmin"
+      "value": "RdGateway"
     },
     "adminPassword": {
       "value": "Password123!"
